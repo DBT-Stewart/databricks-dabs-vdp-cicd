@@ -5,6 +5,28 @@ bundle:
 include:
   - resources/*.yml
 
+# Define variables that can be used across all targets
+variables:
+  catalog:
+    description: Target catalog name
+    default: dev_catalog
+  
+  schema:
+    description: Target schema name
+    default: customer_analytics
+  
+  source_catalog:
+    description: Source catalog for sample data
+    default: samples
+  
+  source_schema:
+    description: Source schema for sample data
+    default: tpcds_sf1
+  
+  job_name:
+    description: Name of the job
+    default: customer_sales_job
+
 # Define targets (environments)
 targets:
   # Development environment
@@ -12,8 +34,9 @@ targets:
     mode: development
     default: true
     workspace:
-      host: https://YOUR-DEV-WORKSPACE.cloud.databricks.com
+      host: https://dbc-a9aee957-443a.cloud.databricks.com
     
+    # Override variables for dev
     variables:
       catalog: dev_catalog
       schema: customer_analytics
@@ -29,9 +52,10 @@ targets:
   prod:
     mode: production
     workspace:
-      host: https://YOUR-PROD-WORKSPACE.cloud.databricks.com
+      host: https://dbc-8dfc6ed2-4b87.cloud.databricks.com
       root_path: /Workspace/Prod/customer_sales_analytics
     
+    # Override variables for prod
     variables:
       catalog: prod_catalog
       schema: customer_analytics
@@ -42,9 +66,3 @@ targets:
       jobs:
         customer_sales_job:
           name: "[PROD] Customer Sales Analytics"
-
-# Variables accessible across all targets
-variables:
-  job_name:
-    description: Name of the job
-    default: customer_sales_job

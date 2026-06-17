@@ -1,6 +1,37 @@
 # Databricks notebook source
 # MAGIC %md
 # MAGIC # Customer Sales Data Preparation
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## Configuration
+
+# COMMAND ----------
+
+# Create widgets for configuration
+dbutils.widgets.text("catalog", "dev_catalog", "Target Catalog")
+dbutils.widgets.text("schema", "customer_analytics", "Target Schema")
+dbutils.widgets.text("source_catalog", "samples", "Source Catalog")
+dbutils.widgets.text("source_schema", "tpcds_sf1", "Source Schema")
+
+# Get values from widgets
+catalog = dbutils.widgets.get("catalog")
+schema = dbutils.widgets.get("schema")
+source_catalog = dbutils.widgets.get("source_catalog")
+source_schema = dbutils.widgets.get("source_schema")
+
+print("="*60)
+print(f"Environment Configuration")
+print("="*60)
+print(f"Target Catalog: {catalog}")
+print(f"Target Schema: {schema}")
+print(f"Source Catalog: {source_catalog}")
+print(f"Source Schema: {source_schema}")
+print("="*60)
+
+# COMMAND ----------
+
 # MAGIC 
 # MAGIC **Purpose**: Transform and enrich customer sales data from TPC-DS sample tables
 # MAGIC 

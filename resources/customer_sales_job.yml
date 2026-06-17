@@ -9,16 +9,7 @@ resources:
             notebook_path: ../src/notebooks/01_customer_sales_prep.py
             source: WORKSPACE
           
-          new_cluster:
-            num_workers: 2
-            spark_version: 13.3.x-scala2.12
-            node_type_id: i3.xlarge
-            spark_conf:
-              spark.databricks.delta.preview.enabled: "true"
-              catalog: "${bundle.target}_catalog"
-              schema: "customer_analytics"
-              source_catalog: "samples"
-              source_schema: "tpcds_sf1"
+          # No cluster configuration - uses serverless by default
         
         - task_key: data_quality_checks
           depends_on:
@@ -27,14 +18,6 @@ resources:
           notebook_task:
             notebook_path: ../src/notebooks/02_data_quality_checks.py
             source: WORKSPACE
-          
-          new_cluster:
-            num_workers: 1
-            spark_version: 13.3.x-scala2.12
-            node_type_id: i3.xlarge
-            spark_conf:
-              catalog: "${bundle.target}_catalog"
-              schema: "customer_analytics"
       
       email_notifications:
         on_failure:

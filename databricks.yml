@@ -1,0 +1,50 @@
+bundle:
+  name: customer_sales_analytics
+
+# Include configuration files
+include:
+  - resources/*.yml
+
+# Define targets (environments)
+targets:
+  # Development environment
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: https://YOUR-DEV-WORKSPACE.cloud.databricks.com
+    
+    variables:
+      catalog: dev_catalog
+      schema: customer_analytics
+      source_catalog: samples
+      source_schema: tpcds_sf1
+    
+    resources:
+      jobs:
+        customer_sales_job:
+          name: "[DEV] Customer Sales Analytics"
+          
+  # Production environment
+  prod:
+    mode: production
+    workspace:
+      host: https://YOUR-PROD-WORKSPACE.cloud.databricks.com
+      root_path: /Workspace/Prod/customer_sales_analytics
+    
+    variables:
+      catalog: prod_catalog
+      schema: customer_analytics
+      source_catalog: samples
+      source_schema: tpcds_sf1
+    
+    resources:
+      jobs:
+        customer_sales_job:
+          name: "[PROD] Customer Sales Analytics"
+
+# Variables accessible across all targets
+variables:
+  job_name:
+    description: Name of the job
+    default: customer_sales_job

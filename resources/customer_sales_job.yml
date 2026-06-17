@@ -1,0 +1,43 @@
+resources:
+  jobs:
+    customer_sales_job:
+      name: ${var.job_name}
+      
+      tasks:
+        - task_key: customer_sales_prep
+          notebook_task:
+            notebook_path: ../src/notebooks/01_customer_sales_prep.py
+            source: WORKSPACE
+          
+          new_cluster:
+            num_workers: 2
+            spark_version: 13.3.x-scala2.12
+            node_type_id: i3.xlarge
+            spark_conf:
+              spark.databricks.delta.preview.enabled: "true"
+          
+          libraries:
+            - pypi:
+                package: pandas
+        
+        - task_key: data_quality_checks
+          depends_on:
+            - task_key: customer_sales_prep
+          
+          notebook_task:
+            notebook_path: ../src/notebooks/02_data_quality_checks.py
+            source: WORKSPACE
+          
+          new_cluster:
+            num_workers: 1
+            spark_version: 13.3.x-scala2.12
+            node_type_id: i3.xlarge
+      
+      schedule:
+        quartz_cron_expression: "0 0 2 * * ?"
+        timezone_id: "America/New_York"
+        pause_status: PAUSED
+      
+      email_notifications:
+        on_failure:
+          - your-email@company.com
